@@ -1,0 +1,55 @@
+﻿@model float
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="container-fluid disc-haven-bg-color-midgrey">
+    <div class="row welcome text-center">
+        
+        <div class="col-12">
+            <p class="lead">Browse a comprehensive collection of movies, music, games and software..register and place your orders online today</p>
+        </div>
+    </div>
+</div>
+
+<!--Image Slider-->
+<div id="slides" class="carousel slide" data-ride="carousel" data-interval="@Model">
+    <ul class="carousel-indicators">
+        <li data-target="#slides" data-slide-to="0" class="active"></li>
+        <li data-target="#slides" data-slide-to="1"></li>
+        <li data-target="#slides" data-slide-to="2"></li>
+        <li data-target="#slides" data-slide-to="3"></li>
+    </ul>
+    <div class="carousel-inner align-content-center">
+        <div class="carousel-item active">
+            <img src="~/Content/Img/Site/cropped/slidemovie3_Cropped.jpg" alt="image not found">
+            <div class="carousel-caption">
+                <h4 class="display-6">Movies</h4>
+                <h6>All your favourite titles available in both DVD and Blu Ray formats</h6>
+                @*<button type="button" class="btn btn-sm btn-outline-light btn-lg">View Demo</button>
+                <button type="button" class="btn btn-sm btn-primary btn-lg">View Demo</button>*@
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="~/Content/Img/Site/slidemusic2.jpg" alt="image not found">
+            <div class="carousel-caption">
+                <h4 class="display-6">Music</h4>
+                <h6>The latest releases and timeless classics - available in CD and Vinyl formats</h6>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="~/Content/Img/Site/cropped/slidegame_Cropped.jpg" alt="image not found">
+            <div class="carousel-caption">
+                <h4 class="display-6">Games</h4>
+                <h6>Browse a popular collection of titles available on all gaming platforms</h6>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="~/Content/Img/Site/cropped/slidesoftware4.jpg" alt="image not found">
+            <div class="carousel-caption">
+                <h4 class="display-6">Software</h4>
+                <h6>Keep your systems up to date with the latest and greatest software products</h6>
+            </div>
+        </div>
+    </div>
+</div>

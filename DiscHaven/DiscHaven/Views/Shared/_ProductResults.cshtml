@@ -1,0 +1,50 @@
+﻿@model List<DiscHavenDataAccess.Models.Product>
+
+<div class="row padding align-items-center disc-haven-bg-color-lightgrey">
+    @foreach (var product in Model)
+    {
+        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+            <div class="card">
+                <img src="~/Content/Img/Cover/@product.Image" alt="image not found" class="card-img-top hover-opacity cursor-hover" onclick="displayProductSearchModal(@product.ID)">
+                <div class="card-body">
+                    <h4 class="card-title"><small>@product.Name</small></h4>
+                    <h6 class="pt-2">Price: @string.Format("{0:C}", product.Price)</h6>
+                    <button id="@($"btn_add{product.ID}")" type="button" class="btn w-100 mb-1 btn-info" data-pid="@product.ID" onclick="addToShoppingCart(this)">Add To Cart</button>
+                    @*<button type="button" class="btn btn-sm btn-outline-secondary w-100" onclick="displayProductSearchModal(@product.ID)">Modal</button>*@
+                    <a class="btn btn-sm btn-outline-secondary w-100" href="@Url.Action("viewproduct","product", new { id = product.ID})">Page</a>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!--pagination display-->
+
+    @{
+        int totalPages = ViewBag.totalPages;
+        int requestedPage = ViewBag.requestedPage;
+    }
+
+    <div class="col-12 m-0 text-center p-0">
+        see more results
+    </div>
+    <div class="col-12 pt-0 mt-0">
+        <nav>
+            <ul class="pagination justify-content-center pagination-ul">
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    if (i == requestedPage)
+                    {
+                        //style the control differently
+                        <li class="page-item">
+                            <input type="button" class="page-link disc-haven-fg-color-charcoal" value="@i" disabled />
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item"><input type="button" class="page-link" value="@i" onclick="loadPage(@i)" /></li>
+                    }
+                }
+            </ul>
+        </nav>
+    </div>
+</div>

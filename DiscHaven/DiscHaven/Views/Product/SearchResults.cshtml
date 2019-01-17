@@ -1,0 +1,93 @@
+﻿@model List<DiscHavenDataAccess.Models.Product>
+@{
+    ViewBag.Title = "Search Results";
+}
+<!--- display category-->
+<div id="top" class="container-fluid padding">
+    <div class="row text-center">
+        <div class="col-12">
+            <h1 class="display-4">Search Results</h1>
+        </div>
+        <hr>
+    </div>
+</div>
+
+<!--- Cards | Result Products Page -->
+<!--
+    dynamic href contains product ID, this link will be used to take customer to a detailed product view.
+    the button element will be used to call js function - post back to add item to shopping cart with out leaving page
+-->
+<div id="productResults" class="container-fluid padding">
+    @{
+        Html.RenderPartial("_ProductResults", Model);
+    }
+</div>
+<div class="centred-xy">
+    <div id="spinner" class="spinner" style="display:none"></div>
+</div>
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="productModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="centred-xy">
+                <div id="mspinner" class="spinner" style="display:none"></div>
+            </div>
+
+            <div id="modalContent">
+                <div class="modal-body">
+                    <div class="card">
+                        <img id="m_Image" src="#" alt="image not found" class="card-img-top">
+                        <div class="card-body">
+                            <h4 id="m_Title" class="card-title">title</h4>
+                            <h6 class="pt-2"><b>Type: </b><span id="m_Type"></span></h6>
+                            <div id="collapseDescription" class="collapse">
+                                <p id="m_Description" class="card-text"></p>
+                            </div>
+                            <button class="btn btn-sm" data-toggle="collapse" data-target="#collapseDescription">about</button>
+                            <h6 class="pt-2">RRP: <small id="m_RRP"></small></h6>
+                            <h6 class="pt-2">Discount: <small id="m_Discount"></small></h6>
+                            <h6 class="pt-2">Our Price: <small id="m_Price"></small></h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-info" id="m_Action" data-pid="" onclick="addToShoppingCart(this)">Add To Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--script for updating modal-->
+<script>
+    function loadPage(requestedPage) {
+        var productResults = document.getElementById("productResults");
+        $("#productResults").hide();
+        //window.location.href = "#top";
+        //var spinner = document.getElementById("spinner");
+        //spinner.style.display = 'block';
+      
+        var http = new XMLHttpRequest();
+
+        http.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                spinner.style.display = 'none';             
+                productResults.innerHTML = this.responseText;
+                $("#productResults").fadeIn(600);
+            }
+        };
+
+        http.open('GET', 'http://localhost:52075/Product/LoadPage/?requestedPage=' + requestedPage, true);
+        http.send();
+    }
+</script>

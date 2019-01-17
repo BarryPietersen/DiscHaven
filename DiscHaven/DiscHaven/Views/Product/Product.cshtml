@@ -1,0 +1,33 @@
+﻿@model DiscHavenDataAccess.Models.Product
+@{
+    ViewBag.Title = Model.Name;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="m-auto col-sm-12 col-md-8 col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2>@Model.Title</h2>
+                </div>
+                <img id="m_Image" src="/Content/Img/Cover/@Model.Image" alt="image not found" class="card-img-top">
+                <div class="card-body">
+                    <h4 id="m_Title" class="">@Model.Name</h4>
+                    <h6 class="pt-2"><b>Type:</b> @Model.Category/@Model.MediaType</h6>
+                    <div class="">
+                        <p class="card-text">@Model.Description</p>
+                    </div>
+                    <h6 class="pt-2">RRP: <small id="m_RRP">@string.Format("{0:C}", Model.RRP)</small></h6>
+                    <h6 class="pt-2">Discount: <small id="m_Discount">@string.Format("{0:C}", Model.Discount)</small></h6>
+                    <h6 class="pt-2">Our Price: <small id="m_Price" class="">@string.Format("{0:C}", Model.Price)</small></h6>
+                </div>
+                <div class="card-footer">
+                    <button type="button" class="btn btn-secondary" onclick="window.history.back();"><i class="fas fa-angle-double-left"></i></button>
+                    <button type="button" class="btn btn-info" id="m_Action" data-pid="@Model.ID" onclick="addToShoppingCart(this)">Add To Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

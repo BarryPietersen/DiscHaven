@@ -1,0 +1,97 @@
+﻿@model List<DiscHavenDataAccess.Models.OrderSummary>
+@{
+    ViewBag.Title = "OrderHistory";
+}
+
+<!-- shopping cart contents table----------------------------------------------------->
+<div class="container-fluid">
+    <div class="row text-center">
+        <div class="col-12">
+            <h4>@(Model.Count > 0 ? "Order History" : "You Have No Previous Orders")</h4>
+        </div>
+        <hr>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <table class="table table-hover table-striped table-responsive-sm table-bordered">
+            <thead>
+                <tr class="text-center disc-haven-bg-color-midgrey">
+                    <th scope="col">Status</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Item Count</th>
+                    <th scope="col">GST (%)</th>
+                    <th scope="col">Sub Total</th>
+                    <th scope="col">Grand Total</th>
+                    <th scope="col">Item Detail</th>
+                </tr>
+            </thead>
+            <tbody class="text-center">
+                @foreach (var order in Model)
+                {
+                <tr>
+                    <th scope="row">@order.StatusCode</th>
+                    <td>@order.Date.ToShortDateString()</td>
+                    <td>@order.ItemCount</td>
+                    <td>@string.Format("{0:P2}", order.GstFactor)</td>
+                    <td>@string.Format("{0:C}", order.Total)</td>
+                    <td>@string.Format("{0:C}", order.GrandTotal)</td>
+                    
+                    @*<td><input type="button" class="btn btn-secondary btn-sm" value="Details" onclick="updateOrderDetailsModal(@order.ID)" /></td>*@
+                    <td><button class="btn btn-sm btn-outline-info" value="Details" onclick="updateOrderDetailsModal(@order.ID)"><i class="fa fa-list" aria-hidden="true"></i></button></td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="OrderDetails" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header justify-content-center">
+                <h4 class="text-center m-auto">Order Details</h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="OrderItems">inner html will be swapped by javascript</div>
+            <div class="centred-xy">
+                <div id="spinner" class="spinner" style="display:none"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateOrderDetailsModal(id) {
+        var http = new XMLHttpRequest();
+        var spinner = document.getElementById("spinner");
+        var orderItems = document.getElementById("OrderItems");
+
+        orderItems.innerHTML = '';
+        spinner.style.display = 'block';
+
+        http.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                spinner.style.display = 'none';
+                orderItems.innerHTML = this.responseText;
+            }
+        }
+
+        $("#OrderDetails").modal("toggle");
+
+        http.timeout = 3000;
+
+        http.ontimeout = () => {
+            spinner.style.display = 'none';
+            orderItems.innerHTML = "The request timed out, please try again";
+        }
+
+        http.open('POST', 'http://localhost:52075/Account/OrderItems/' + id, true);
+
+        http.send();
+    }
+</script>
+

@@ -1,0 +1,294 @@
+﻿@model DiscHaven.ViewModels.CustomerDetailsViewModel
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <script>
+        window.onload = function () {
+            popupInfo(false, '@ViewBag.ErrorMessage', 'Actions Required', '');
+        }
+    </script>
+}
+
+@functions{
+    private static string getInputClass(string fieldName, DiscHaven.ViewModels.CustomerDetailsViewModel model)
+    {
+        if (model.ValidationMessages != null) return model.ValidationMessages.ContainsKey(fieldName) ? "is-invalid" : "is-valid";
+        else return "";
+    }
+}
+
+@helper displayMessage(string fieldName)
+{
+    if (Model.ValidationMessages != null)
+    {
+        if (Model.ValidationMessages.ContainsKey(fieldName))
+        {
+            <div class="invalid-feedback"><i class="fa fa-times mr-1"></i> @Model.ValidationMessages[fieldName]</div>
+        }
+        else
+        {
+            <div class="valid-feedback">Accepted <i class='fa fa-check ml-1'></i></div>
+        }
+    }
+}
+
+@helper sqaHiddenID(byte i)
+{
+    if (Model.SecurityQuestions != null)
+    {
+        <input type="hidden" id="@($"SecurityQuestion{i}ID")" name="@($"SecurityQuestion{i}ID")" value="@(Model.SecurityQuestions[i - 1].ID)" />
+    }
+}
+
+<!--basic-->
+        <div class="row">
+            <div class="col-md-6">
+
+                <!--personal details-->
+                <h5 class="">Personal</h5>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="FirstName">First Name</label>
+                        <input type="text" class="form-control @getInputClass("FirstName", Model)" id="FirstName" name="FirstName" onchange="defaultInput(this)" value="@Model.CustomerDto.FirstName">
+                        @displayMessage("FirstName")
+                    </div>
+                    <div class="col-md-12">
+                        <label for="LastName">Last Name</label>
+                        <input type="text" class="form-control @getInputClass("LastName", Model)" id="LastName" name="LastName" onchange="defaultInput(this)" value="@Model.CustomerDto.LastName" required>
+                        @displayMessage("LastName")
+                    </div>
+                    <div class="col-md-12">
+                        <label for="Email">Email Address</label>
+
+                        <div class="input-group mb-2 mr-sm-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">@@</div>
+                            </div>
+                            <input type="email" class="form-control @getInputClass("Email", Model)" id="Email" name="Email" onchange="defaultInput(this)" value="@Model.CustomerDto.Email" required>
+                            @displayMessage("Email")
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <!-- ===================================================================================================================================================================== -->
+                <!--account details-->
+                <h5 class="">Account</h5>
+                <div class="row">
+                    @if (Model.IsNew || (Model.ValidationMessages != null && Model.ValidationMessages.ContainsKey("Password")))
+                    {
+
+                        if (!Model.IsNew)
+                        {
+                            <!--display the username as readonly-->
+                            <div class="col-md-12">
+                                <label for="Username">Username</label>
+                                <input type="text" class="form-control" id="Username" name="Username" value="@Model.CustomerDto.Username" readonly>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-12">
+                                <label for="Username">Username</label>
+                                <input type="text" class="form-control @getInputClass("Username", Model)" id="Username" name="Username" onchange="defaultInput(this)" value="@Model.CustomerDto.Username" required>
+                                @displayMessage("Username")
+                            </div>
+                        }
+
+                        <div class="col-md-6">
+                            <label for="Password">Password</label>
+                            <input type="password" class="form-control @getInputClass("Password", Model)" id="Password" name="Password" onchange="defaultInput(this)" value="@(Model.ValidationMessages != null ? Model.ValidationMessages.ContainsKey("Password") ? "" : Model.CustomerDto.Password : "Password12!@")" required>
+                            @displayMessage("Password")
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-row ml-0" for="ConfirmPassword">Confirm Password</label>
+                            <input type="password" class="form-control @getInputClass("ConfirmPassword", Model)" id="ConfirmPassword" name="ConfirmPassword" onchange="defaultInput(this)" value="@(Model.ValidationMessages != null ? Model.ValidationMessages.ContainsKey("ConfirmPassword") ? "" : Request["ConfirmPassword"] : "Password12!@")" required>
+                            @displayMessage("ConfirmPassword")
+                        </div>
+                        <div class="col-md-12">
+                            <label for="PasswordHint">Password Hint</label>
+                            <input type="text" class="form-control @getInputClass("PasswordHint", Model)" id="PasswordHint" name="PasswordHint" onchange="defaultInput(this)" value="@Model.CustomerDto.PasswordHint" required>
+                            @displayMessage("PasswordHint")
+                        </div>
+                    }
+                    else
+                    {
+                        <!--display the username as readonly-->
+                        <div class="col-md-12">
+                            <label for="Username">Username</label>
+                            <input type="text" class="form-control" id="Username" name="Username" onchange="defaultInput(this)" value="@Model.CustomerDto.Username" readonly>
+                        </div>
+
+                        <!--a collapsable container to hide the password fields-->
+                        <div id="hide" class="collapse row ml-0 mr-0">
+                            <div class="col-md-6">
+                                <label for="Password">New Password</label>
+                                <input type="password" class="form-control @getInputClass("Password", Model)" id="Password" name="Password" onchange="defaultInput(this)" value="@(Model.ValidationMessages != null && Model.ValidationMessages.ContainsKey("Password") ? "" : Model.CustomerDto.Password)" required>
+                                @displayMessage("Password")
+                            </div>
+                            <div class="col-md-6">
+                                <label class="ml-0" for="ConfirmPassword">Confirm New Password</label>
+                                <input type="password" class="form-control @getInputClass("ConfirmPassword", Model)" id="ConfirmPassword" name="ConfirmPassword" onchange="defaultInput(this)" value="@(Model.ValidationMessages != null && Model.ValidationMessages.ContainsKey("ConfirmPassword") ? "" : Request["ConfirmPassword"])" required>
+                                @displayMessage("ConfirmPassword")
+                            </div>
+                            <div class="col-md-12">
+                                <label for="PasswordHint">Password Hint</label>
+                                <input type="text" class="form-control @getInputClass("PasswordHint", Model)" id="PasswordHint" name="PasswordHint" onchange="defaultInput(this)" value="@Model.CustomerDto.PasswordHint" required>
+                                @displayMessage("PasswordHint")
+                            </div>
+                        </div>
+                        <input class="btn btn-sm w-75 m-auto" type="button" value="Change Password" data-toggle="collapse" data-target="#hide" />
+                    }
+                </div>
+            </div>
+
+            <!-- ===================================================================================================================================================================== -->
+
+            <div class="col-md-6">
+                <!--billing bddress-->
+                <h5 class="">Billing Address</h5>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="Address">Address</label>
+                        <input type="text" class="form-control @getInputClass("Address", Model)" id="Address" name="Address" onchange="defaultInput(this)" value="@Model.CustomerDto.Address" required>
+                        @displayMessage("Address")
+                    </div>
+                    <div class="col-md-12">
+                        <label for="City">City</label>
+                        <input type="text" class="form-control @getInputClass("City", Model)" id="City" name="City" onchange="defaultInput(this)" value="@Model.CustomerDto.City" required>
+                        @displayMessage("City")
+                    </div>
+                    <div class="col-md-12">
+                        <label for="State">State</label>
+                        <input type="text" class="form-control @getInputClass("State", Model)" id="State" name="State" onchange="defaultInput(this)" value="@Model.CustomerDto.State" required>
+                        @displayMessage("State")
+
+                    </div>
+                    <div class="col-md-12">
+                        <label for="PostCode">Post Code</label>
+                        <input type="text" class="form-control @getInputClass("PostCode", Model)" id="PostCode" name="PostCode" onchange="defaultInput(this)" value="@Model.CustomerDto.PostCode" required>
+                        @displayMessage("PostCode")
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <!--Shipping Address-->
+                <div class="">
+                    <h5 class="form-check-inline">Shipping Address</h5>
+                    <div class="form-check-inline">
+                        <input class="form-check-input mr-0" type="checkbox" value="" oninput="toggleShipping(this)" id="shipCheck" name="shipCheck">
+                        <label class="form-check-label" for="shipCheck">
+                            Same as billing?
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="ShipAddress">Address</label>
+                        <input type="text" class="form-control @getInputClass("ShipAddress", Model)" id="ShipAddress" name="ShipAddress" oninput="defaultInput(this)" value="@Model.CustomerDto.ShipAddress" required>
+                        @displayMessage("ShipAddress")
+                    </div>
+                    <div class="col-md-12">
+                        <label for="ShipCity">City</label>
+                        <input type="text" class="form-control @getInputClass("ShipCity", Model)" id="ShipCity" name="ShipCity" oninput="defaultInput(this)" value="@Model.CustomerDto.ShipCity" required>
+                        @displayMessage("ShipCity")
+                    </div>
+                    <div class="col-md-12">
+                        <label for="ShipState">State</label>
+                        <input type="text" class="form-control @getInputClass("ShipState", Model)" id="ShipState" name="ShipState" oninput="defaultInput(this)" value="@Model.CustomerDto.ShipState" required>
+                        @displayMessage("ShipState")
+                    </div>
+                    <div class="col-md-12">
+                        <label for="ShipPostCode">Post Code</label>
+                        <input type="text" class="form-control @getInputClass("ShipPostCode", Model)" id="ShipPostCode" name="ShipPostCode" oninput="defaultInput(this)" value="@Model.CustomerDto.ShipPostCode" required>
+                        @displayMessage("ShipPostCode")
+                    </div>
+                </div>
+            </div>
+        </div>
+
+@{
+    string ishidden = !Model.IsNew ? "hidden" : "";
+    string isreadonly = !Model.IsNew ? "readonly" : "";
+}
+
+
+<h5 class="">Securtiy Questions: <small>please provide 3</small></h5>
+<div class="row">
+    <div class="col-md-8">
+        @sqaHiddenID(1)
+        <label for="SecurityQuestion1">Question 1</label>
+        <input type="text" class="form-control @getInputClass("SecurityQuestion1", Model)" id="SecurityQuestion1" name="SecurityQuestion1" oninput="defaultInput(this);" onclick="showAnswer(1);" value="@(Model.SecurityQuestions != null ? Model.SecurityQuestions[0].Question : "hello, how are you today?")" />
+        @displayMessage("SecurityQuestion1")
+    </div>
+
+    <div class="col-md-4" @ishidden id="SecA1">
+        <label for="SecurityAnswer1">Answer 1</label>
+        <input type="password" class="form-control @getInputClass("SecurityAnswer1", Model)" id="SecurityAnswer1" name="SecurityAnswer1" oninput="defaultInput(this)" value="@(Model.SecurityQuestions != null ? Model.SecurityQuestions[0].Answer : "testanswer")" />
+        @displayMessage("SecurityAnswer1")
+    </div>
+
+    <div class="col-md-8">
+        @sqaHiddenID(2)
+        <label for="SecurityQuestion2">Question 2</label>
+        <input type="text" class="form-control @getInputClass("SecurityQuestion2", Model)" id="SecurityQuestion2" name="SecurityQuestion2" oninput="defaultInput(this)" onclick="showAnswer(2);" value="@(Model.SecurityQuestions != null ? Model.SecurityQuestions[1].Question : "hello, how where you yesterday?")" />
+        @displayMessage("SecurityQuestion2")
+    </div>
+
+    <div class="col-md-4" @ishidden id="SecA2">
+        <label for="SecurityAnswer2">Answer 2</label>
+        <input type="password" class="form-control @getInputClass("SecurityAnswer2", Model)" id="SecurityAnswer2" name="SecurityAnswer2" oninput="defaultInput(this)" value="@(Model.SecurityQuestions != null ? Model.SecurityQuestions[1].Answer : "testanswer")" />
+        @displayMessage("SecurityAnswer2")
+    </div>
+
+    <div class="col-md-8">
+        @sqaHiddenID(3)
+        <label for="SecurityQuestion3">Question 3</label>
+        <input type="text" class="form-control @getInputClass("SecurityQuestion3", Model)" id="SecurityQuestion3" name="SecurityQuestion3" oninput="defaultInput(this)" onclick="showAnswer(3);" value="@(Model.SecurityQuestions != null ? Model.SecurityQuestions[2].Question : "hello, how are you going to be tomorrow?")" />
+        @displayMessage("SecurityQuestion3")
+    </div>
+
+    <div class="col-md-4" @ishidden id="SecA3">
+        <label for="SecurityAnswer3">Answer 3</label>
+        <input type="password" class="form-control @getInputClass("SecurityAnswer3", Model)" id="SecurityAnswer3" name="SecurityAnswer3" oninput="defaultInput(this)" value="@(Model.SecurityQuestions != null ? Model.SecurityQuestions[2].Answer : "testanswer")" />
+        @displayMessage("SecurityAnswer3")
+    </div>
+</div>
+
+
+<script>
+    function defaultInput(input) {
+        input.classList.remove('is-invalid', 'is-valid');
+    }
+
+    function toggleShipping(ch) {
+
+        var sAddr = document.getElementById('ShipAddress');
+        var sCity = document.getElementById('ShipCity');
+        var sState = document.getElementById('ShipState');
+        var sPcode = document.getElementById('ShipPostCode');
+
+        if (ch.checked) {
+            var addr = document.getElementById('Address');
+            var city = document.getElementById('City');
+            var state = document.getElementById('State');
+            var pCode = document.getElementById('PostCode');
+
+            sAddr.value = addr.value;
+            sCity.value = city.value;
+            sState.value = state.value;
+            sPcode.value = pCode.value;
+        }
+        else {
+            sAddr.value = "";
+            sCity.value = "";
+            sState.value = "";
+            sPcode.value = "";
+        }
+    }
+
+    function showAnswer(n) {
+        var answerDiv = document.getElementById("SecA" + n);
+        answerDiv.hidden = false;
+    }
+</script>

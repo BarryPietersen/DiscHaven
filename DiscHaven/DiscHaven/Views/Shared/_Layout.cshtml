@@ -1,0 +1,53 @@
+﻿@using System.Web.Optimization;
+@{
+
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+</head>
+<body>
+    <!-- Navigation -->
+    @{Html.RenderAction("RenderNavBar", "Site");}
+
+    @RenderBody()
+
+    <!-- Footer -->
+    @{Html.RenderPartial("_Footer");}
+
+    <!--Majidi custom modal-->
+    <div id="modal-container1" class="modal-container">
+        <div class="modal-popup centred-xy shadow-text modal-colour-normal">
+            <header>
+                <div>&nbsp;</div>
+                <span onclick="$('#modal-container1').fadeOut(300)" class="flat-button xlarge display-topright hover-opacity">&times;</span>
+            </header>
+            <div class="modal-message">
+                THIS MESSAGE WILL BE REPLACED IN JAVASCRIPT AND SHOULD NEVER BE SEEN
+            </div>
+            <footer class="centring-text-parent">
+                <p>&nbsp;</p>
+            </footer>
+        </div>
+
+        <div class="centred-xy">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/site-script")
+</body>
+</html>
+
+
+
+
+
+
+

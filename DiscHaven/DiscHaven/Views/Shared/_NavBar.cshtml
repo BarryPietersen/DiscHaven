@@ -1,0 +1,341 @@
+﻿@model DiscHaven.ViewModels.NavBarViewModel
+
+@*
+    The current site navigation bar,
+    render a view that best suits the user session status -
+    for logged in users some controls will/will not be displayed,
+    for users not logged in, alternative controls will be displayed
+*@
+
+<!-- this boolean is used for very basic client side authentication check,
+     ultimately all authentication will be checked on the server -->
+<script>
+        var _isLoggedIn = @(Model.UserSession.IsAuthenticated ? "true" : "false");
+</script>
+
+<nav class="navbar navbar-expand-lg navbar-dark disc-haven-bg-color-charcoal sticky-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#"><h2>Disc H<img src="~/Content/Img/Site/logo2.png" class="bg-light rounded-circle" width="25" alt="image not found">ven</h2></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("index", "home")">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("about", "home")">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("store", "home")">Stores</a>
+                </li>
+                @if (!Model.UserSession.IsAuthenticated)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("details", "register")">Register</a>
+                    </li>
+                }
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="search" data-toggle="dropdown">Search</a>
+                    <div class="dropdown-menu dropdown-menu-right disc-haven-bg-color-midgrey pt-0 pb-0" id="drop">
+                        <form id="Search" class="my-2 my-lg-0 px-4 py-3" action="@Url.Action("search", "product")" method="get">
+                            <select name="mediaTypeID" id="mediaTypeID" class="custom-select disc-haven-bg-color-lightgrey text-center">
+                                <option value="0">All Media Types</option>
+                                @foreach (var mediaType in Model.MediaTypes)
+                                {
+                                    <option value="@mediaType.ID" @(mediaType.ID == Model.UserSession.SearchParams.MediaTypeID ? "selected": "")>@mediaType.Value</option>
+                                }
+                            </select>
+                            <select name="categoryID" id="categoryID" class="custom-select mt-1 disc-haven-bg-color-lightgrey">
+                                <option value="0">All Categories</option>
+                                @foreach (var category in Model.Categories)
+                                {
+                                    <option value="@category.ID" @(category.ID == Model.UserSession.SearchParams.CategoryID ? "selected" : "")>@category.Value</option>
+                                }
+                            </select>
+                            <input class="form-control w-100 mt-1" type="search" name="searchValue" id="searchValue" placeholder="[product name]" list="dataList" value="@Model.UserSession.SearchParams.SearchValue">
+                            <datalist id="dataList">
+                                @if (Model.UserSession.IsAuthenticated && Model.UserSession.Customer.SearchValues != null)
+                                {
+                                    foreach (string sv in Model.UserSession.Customer.SearchValues)
+                                    {
+                                        <option value="@sv" />
+                                    }
+                                }
+                            </datalist>
+                            <button class="btn disc-haven-fg-color-orange w-100 mt-1 mb-0 disc-haven-brdr-color-orange" type="submit">Search<i class="fas fa-search ml-1"></i></button>
+                        </form>
+                        <span class="dropdown-item drop-fill"></span>
+                    </div>
+                </li>
+                @if (!Model.UserSession.IsAuthenticated)
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="login" data-toggle="dropdown"><i class="fas fa-sign-in-alt disc-haven-fg-color-orange mr-1"></i>Login</a>
+                        <div class="dropdown-menu dropdown-menu-right disc-haven-bg-color-midgrey">
+                            <form class="px-4 py-3" action="@Url.Action("login","home")" method="post">
+                                <div class="mb-1">
+                                    <label for="username">Username</label>
+                                    <input type="text" class="form-control" id="username" name="username" value="barrypietersen">
+                                </div>
+                                <div class="mb-1">
+                                    <label for="password">Password</label>
+                                    <input type="password" class="form-control" id="password" name="password" value="Password12!&#64">
+
+                                </div>
+                                <input class="btn disc-haven-fg-color-orange btn-outline-secondary w-100 mt-1 mb-0" onclick="loginUsingAjax()" type="button" name="btnLogin" value="LoginUsingAjax" />
+                                <button type="submit" class="btn disc-haven-fg-color-orange btn-outline-secondary w-100 mt-1 mb-0">Login</button>
+                            </form>
+                            <input type="button" class="dropdown-item btn mb-1" onclick="displayPasswordHint()" value="need a hint?" />
+                            @*<button type="button" class="dropdown-item btn mb-1" onclick="displayForgotPassword()">hint didnt help?</button>*@
+                            <input type="button" class="dropdown-item btn mb-1" onclick="displayForgotPassword()" value="hint didnt help?" />
+                            <a class="dropdown-item btn" href="@Url.Action("details","register")">Register with us...</a>
+                            <span class="dropdown-item drop-fill"></span>
+                        </div>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="account" data-toggle="dropdown"><i class="fas fa-user mr-1 user-icon"></i>Account</a>
+                        <div class="dropdown-menu dropdown-menu-right disc-haven-bg-color-midgrey">
+                            <a class="dropdown-item" href="@Url.Action("details", "account")"><i class="fa fa-cog disc-haven-fg-color-orange mr-1"></i>Details</a>
+                            <a class="dropdown-item" href="@Url.Action("shoppingcart","account")"><i class="fa fa-shopping-cart disc-haven-fg-color-orange mr-1"></i>Shopping Cart</a>
+                            <a class="dropdown-item" href="@Url.Action("orderhistory","account")"><i class="fa fa-history disc-haven-fg-color-orange mr-1"></i>Order History</a>
+                            <a class="dropdown-item" href="@Url.Action("logout","account")"><i class="fas fa-sign-out-alt disc-haven-fg-color-orange mr-1"></i>Logout</a>
+                            <span class="dropdown-item drop-fill"></span>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn disc-haven-bg-color-midgrey" href="@Url.Action("shoppingcart","account")">
+                            <i class="fa fa-shopping-cart disc-haven-fg-color-charcoal" aria-hidden="true"></i>
+                            <span id="navCartCount" class="badge disc-haven-bg-color-lightgrey disc-haven-fg-color-charcoal fa-shopping-cart">@Model.UserSession.Customer.CartCount</span>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<script>
+
+    function loginUsingAjax() {
+        var username = document.getElementById('username');
+        var password = document.getElementById('password');
+
+        if (username.value === "") {
+            username.focus();
+            username.placeholder = "[required]";
+            return;
+        }
+        if (password.value === "") {
+            password.focus();
+            password.placeholder = "[required]";
+            return;
+        }
+
+        var http = new XMLHttpRequest();
+
+        http.onreadystatechange = function () {
+            var oNodePopup = document.getElementById("modal-container1").querySelector(".modal-popup");
+
+            if (this.readyState === 4 && this.status === 200) {
+
+                try {
+                    var response = JSON.parse(this.responseText);
+
+                    if (response.authenticated) {
+
+                        var loc = window.location.toString();
+
+                        if (loc.includes("unauthenticated")) {
+                            window.location.href = loc.split("unauthenticated")[0];
+                        }
+                        else if (loc.includes("register")) {
+                            window.location.href = loc.split("register")[0];
+                        }
+                        else window.location.reload();
+                    }
+                    else {
+                        popupInfo(false, "failed login attempt", response.message, "");
+                    }
+
+                    password.value = "";
+                    password.focus();
+
+                } catch (e) {
+                    oNodePopup.querySelector(".modal-message").innerHTML = this.responseText;
+                }              
+            }
+        }
+    
+
+        http.open('POST', '@Url.Action("loginusingajax","home")', true);
+        http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        http.send("username=" + username.value + "&password=" + password.value);
+    }
+
+    function displayForgotPassword() {
+
+        var username = document.getElementById("username");
+
+        var html = '<label for="forgottenUsername">Enter Your Username</label>' +
+            '<input class="form-control mb-2" type="text" id="forgottenUsername" name="forgottenUsername" value="' + username.value + '" placeholder="[username]" />' +
+            '<button class="btn btn-info mb-2" onclick="getChallengeQuestions()" >Request Challenge Questions</button >';
+
+        popupInfo(false, html, 'Oops.. Forgotten Password?');
+        $("#login").dropdown('toggle');
+        $('#forgottenUsername').focus();
+    }
+
+    function getChallengeQuestions() {
+        var username = document.getElementById('forgottenUsername');
+
+        if (username.value !== '') {
+            var http = new XMLHttpRequest();
+
+            http.onreadystatechange = function () {
+                var oNodePopup = document.getElementById("modal-container1").querySelector(".modal-popup");
+
+                if (this.readyState === 4 && this.status === 200) {
+
+                    try {
+                        var response = JSON.parse(this.responseText);
+                        oNodePopup.querySelector("label").innerHTML = response.ErrorMessage;
+                        username.value = "";
+                        username.focus();
+
+                    } catch (e) {
+                        oNodePopup.querySelector(".modal-message").innerHTML = this.responseText;
+                    }              
+                }
+            }
+        }
+
+        http.open('POST', '@Url.Action("GetChallengeQuestions","Forgotten")', true);
+        http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        http.send("username=" + username.value);
+    }
+
+    function submitChallengeAnswers() {
+        var form = document.getElementById('frmQAs');
+
+        var ans1 = document.getElementById('answer1');
+        var ans2 = document.getElementById('answer2');
+        var id1 = document.getElementById('question1ID').value;
+        var id2 = document.getElementById('question2ID').value;
+        var username = document.getElementById('forgottenUsername').value;
+
+        if (ans1.value === '') {
+            ans1.placeholder = '[required field]';
+            ans1.focus();
+            return;
+        }
+        if (ans2.value === '') {
+            ans2.placeholder = '[required field]';
+            ans2.focus();
+            return;
+        }
+
+        //var formData = new FormData();
+
+        //formData.append('username', document.getElementById('forgottenUsername').value);
+        //formData.append('question1ID', document.getElementById('question1ID').value);
+        //formData.append('answer1', document.getElementById('answer1').value);
+        //formData.append('question2ID', document.getElementById('question2ID').value);
+        //formData.append('answer2', document.getElementById('answer2').value);
+
+        var http = new XMLHttpRequest();
+        http.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                var oNodeCanvas = document.getElementById("modal-container1");
+                var oNodePopup = oNodeCanvas.querySelector(".modal-popup");
+
+                // at this point we identify if we are moving to the next step
+                // or display the 
+                oNodePopup.querySelector(".modal-message").innerHTML = this.responseText;
+            }
+        }
+
+        http.open('POST', '@Url.Action("SubmitChallengeAnswers", "Forgotten")', true);
+        http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        http.send("username=" + username + "&answer1=" + ans1.value + "&answer2=" + ans2.value + "&question1ID=" + id1 + "&question2ID=" + id2);
+    }
+
+    function submitPasswords() {
+        var password = document.getElementById('forgottenPassword');
+        var confirmPassword = document.getElementById('forgottenConfirmPassword');
+        var username = document.getElementById('forgottenUsername');
+
+        // optionally test password strength and equality on client
+        if (true) {
+
+        }
+
+        var http = new XMLHttpRequest();
+        http.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+
+                var oNodePopup = document.getElementById("modal-container1").querySelector(".modal-popup");
+                var header = oNodePopup.querySelector("header>div");
+                var message = oNodePopup.querySelector(".modal-message");
+
+                try {
+                    var commandResult = JSON.parse(this.responseText);
+
+                    if (commandResult.ID > 0) {
+                        header.innerHTML = 'Success';
+                        message.innerHTML = 'Yor password has been reset..please login and continue shopping';
+                    }
+                    else {
+                        header.innerHTML = 'Something Went Wrong';
+                        message.innerHTML = commandResult.ErrorMessage;
+                    }
+
+                } catch (e) {
+                    header.innerHTML = 'Please Try Again';
+                    message.innerHTML = this.responseText;
+                    document.getElementById('forgottenPassword').focus();
+                }     
+            }
+        }
+
+        http.open('POST', '@Url.Action("SubmitForgottenPassword", "Forgotten")', true);
+        http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        http.send("username=" + username.value + "&password=" + password.value + "&confirmPassword=" + confirmPassword.value);  
+    }
+
+    function displayPasswordHint() {
+        var username = document.getElementById('username');
+
+        if (username.value === '') {
+            username.focus();
+            username.placeholder = '[this field is required]';
+            return;
+        }
+
+        var http = new XMLHttpRequest();
+
+        http.onreadystatechange = function () {
+
+            if (this.readyState === 4 && this.status === 200) {
+
+                var response = JSON.parse(this.responseText);
+
+                if (response.foundMatch) {
+                    popupInfo(false, response.message, 'Hint');
+                }
+                else {
+                    popupInfo(false, response.message, '');
+                }
+            }
+        }
+
+        http.open('POST', '@Url.Action("GetPasswordHint","Forgotten")', true);
+        http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        http.send("username=" + username.value);
+    }
+
+</script>

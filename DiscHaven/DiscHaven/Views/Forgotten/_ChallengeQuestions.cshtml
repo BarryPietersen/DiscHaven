@@ -1,0 +1,36 @@
+﻿@model DiscHavenDataAccess.Models.SecQA[]
+
+@{
+    int i = 1;
+ }
+
+<div class="container">
+    <div class="row">
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <h4 class="text-center">@ViewBag.ErrorMessage</h4>
+        }
+
+        <form id="frmQAs" action="@Url.Action("SubmitChallengeQuestions","Home")" method="post"></form>
+
+        <label for="username">Username</label>
+        <input type="text" form="frmQAs" class="form-control" id="forgottenUsername" name="username" value="@Request["Username"]" readonly /><br><br>
+
+        @foreach (var q in Model.ToList())
+        {
+            <input class="form-control" form="frmQAs" type="hidden" id="question@(i)ID" name="question@(i)ID" value="@q.ID" />
+
+            <label for="q@(i)">Q:</label>
+            <input type="text" name="q@(i)" class="form-control" readonly value="@q.Question" />
+            <label for="answer@(i)">A:</label>
+            <input type="text" form="frmQAs" class="form-control" id="answer@(i)" name="answer@(i)" value="testanswer" />
+            i++;
+        } 
+
+        <div class="mt-2 mb-2">
+            <button type="button" class="btn btn-primary" onclick="submitChallengeAnswers()">Submit</button>
+            <input type="button" class="btn btn-info" onclick="getChallengeQuestions()" value="Refresh Questions?" />
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,14 @@
+﻿@model DiscHaven.ViewModels.CustomerDetailsViewModel
+@{
+    ViewBag.Title = "Account Details";
+}
+
+<h2 class="text-center mt-4">Update Account Details</h2>
+<div class="container">   
+    <form class="p-1" id="customerDetails" method="post" name="customerDetails" action="@Url.Action("UpdateDetails", "Account")" novalidate>
+        @Html.AntiForgeryToken()
+        @{Html.RenderPartial("_CustomerDetails", Model);}
+        <button class="btn btn-primary" type="submit">Update</button>
+    </form>
+</div>
+

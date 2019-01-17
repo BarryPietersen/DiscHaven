@@ -1,0 +1,345 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,700');
+
+html, body {
+    height: 100%;
+    width: 100%;
+    font-family: 'Poppins', sans-serif;
+    color: #222;
+    background-color: #F0F0F0
+}
+
+/*navigation styling --------------------------*/
+.navbar{
+  padding: .8rem;
+  background-color: #F0F0F0 !important;
+}
+.navbar-nav li{
+  padding-right: 20px;
+}
+.nav-link{
+  font-size: 1.1em !important;
+}
+.nav-link:hover{
+  color: #F37332 !important;
+}
+.btn:hover .fa-shopping-cart{
+    color: #F37332 !important;
+}
+.pagination-ul li a {
+    color: #3E3E3E;
+    border-color: #F37332;
+}
+.user-icon {
+    color: green;
+}
+.pagination-ul li a:hover {
+    background-color: rgba(243, 115, 50, 0.5);
+    color: #3E3E3E;
+}
+
+/*carousel slider styling -----------------------*/
+.carousel-inner img{
+  width: 100%;
+  height: 100%;
+}
+.carousel-caption {
+    top: 65%;
+    transform: translateY(-50%);
+}
+.carousel-caption h4{
+  text-transform: uppercase;
+  text-shadow: 1px 1px 15px #000;
+}
+.carousel-caption h6{
+  font-weight: 500;
+  text-shadow: 1px 1px 10px #000;
+  padding-bottom: 1rem;
+}
+
+/*products results page -----------------------*/
+.card-button{
+    background-color: #F0F0F0 !important;
+    border-color: #F37332;
+    color: #F37332 !important;
+    font-size: 90% !important;
+    margin: 1px;
+}
+
+.drop-fill{
+  width: 250px;
+}
+
+/*shopping cart -----------------------*/
+.cartspan {
+    cursor: pointer;
+    color: blue;
+    text-decoration: none;
+}
+
+.cartspan:hover {
+    text-decoration: underline;
+}
+
+/*--- Disc Haven Color Scheme ------------------------------------------*/
+.disc-haven-bg-color-orange { background-color: #F37332 !important; }
+.disc-haven-bg-color-charcoal { background-color: #3E3E3E !important; }
+.disc-haven-bg-color-midgrey { background-color: #D6D6D6 !important; }
+.disc-haven-bg-color-lightgrey { background-color: #F0F0F0 !important; }
+.disc-haven-bg-color-alertred { background-color: #CC0000 !important; }
+
+.disc-haven-brdr-color-orange { border-color: #F37332 !important; }
+.disc-haven-brdr-color-charcoal { border-color: #3E3E3E !important; }
+.disc-haven-brdr-color-midgrey { border-color: #D6D6D6 !important; }
+.disc-haven-brdr-color-lightgrey { border-color: #F0F0F0 !important; }
+.disc-haven-brdr-color-alertred { border-color: #CC0000 !important; }
+
+.disc-haven-fg-color-orange { color: #F37332 !important; }
+.disc-haven-fg-color-charcoal { color: #3E3E3E !important; }
+.disc-haven-fg-color-midgrey { color: #D6D6D6 !important; }
+.disc-haven-fg-color-lightgrey { color: #F0F0F0 !important; }
+.disc-haven-fg-color-alertred { color: #CC0000 !important; }
+
+/*--- Majidi - custom modal ------------------------------------------*/
+
+.modal-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(255,255,255,0.8);
+}
+
+.modal-colour-normal {
+    color: white;
+    background-color: rgba(0,0,0,0.6);
+}
+
+.modal-colour-warning {
+    color: cornflowerblue;
+    background-color: rgba(224,224,0,0.4);
+}
+
+.modal-colour-error {
+    color: white;
+    background-color: rgba(255,0,0,0.8);
+}
+
+.modal-popup {
+    /*font-family: Arial, sans-serif;*/
+    font-size: 15pt;
+    text-align: center;
+    border: 1px solid black;
+    border-radius: 10px;
+    /*box-shadow: 6px 6px grey;*/
+    padding: 20px;
+    font-weight: normal !important;
+}
+
+.modal-popup header {
+    font-size: 20pt;
+    border-bottom: 2px groove white;
+    font-weight: bold !important;
+}
+
+.modal-popup footer {
+    font-size: x-small;
+    border-top: 2px groove white;
+    font-weight: bold !important;
+}
+
+.display-topright {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.xlarge {
+    font-size: 32px !important;
+}
+
+.cursor-hover:hover {
+    cursor:pointer;
+}
+
+.hover-opacity:hover, .hover-opacity:active {
+    opacity: 0.60;
+}
+
+.hover-opacity-off:hover {
+    opacity: 1;
+}
+
+.flat-button:hover, .flat-button:active {
+    color: black;
+    font-weight: bold;
+    /*border: 1px solid slategray;*/
+}
+
+.flat-button {
+    margin: 2px;
+    display: inline-block;
+    padding: 8px 16px;
+    vertical-align: middle;
+    overflow: hidden;
+    text-decoration: none;
+    color: lightgrey;
+    background-color: inherit;
+    text-align: center;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all linear 0.2s;
+}
+
+/* 
+   Centres element horizontally and vertically within its parent
+   Also supports elements of unspecified size that may grow in any direction based on content 
+*/
+.centred-xy {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.spinner {
+    z-index: 7;
+    margin: 0;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    border-style: solid;
+    border-width: 10px;
+    border-radius: 50%;
+    border-color: rgba(54, 160, 215, 0.6) rgba(54, 160, 215, 0.9);
+    -webkit-animation: spin 1s linear infinite;
+    -o-animation: spin 1s linear infinite;
+    animation: spin 1s linear infinite;
+}
+
+
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@-o-keyframes spin {
+    0% {
+        -o-transform: rotate(0deg);
+    }
+
+    100% {
+        -o-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+/*--- ------------------------------------------*/
+
+/*---Media Queries ---------------------------------------------*/
+@media (max-width: 992px) {
+
+  }
+@media (max-width: 768px) {
+    .centred-xy {
+        position: relative;
+    }
+}
+@media (max-width: 600px) {
+    .carousel-caption {
+        display: none;
+    }
+}
+
+@media only screen and (max-device-width: 768px) {
+    .carousel-caption {
+        display: none;
+    }
+}
+
+/*---Firefox Bug Fix --*/
+.carousel-item {
+  transition: -webkit-transform 0.5s ease;
+  transition: transform 0.5s ease;
+  transition: transform 0.5s ease, -webkit-transform 0.5s ease;
+  -webkit-backface-visibility: visible;
+  backface-visibility: visible;
+}
+/*--- Fixed Background Image --*/
+figure {
+  position: relative;
+  width: 100%;
+  height: 60%;
+  margin: 0!important;
+}
+.fixed-wrap {
+  clip: rect(0, auto, auto, 0);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+#fixed {
+  background-image: url('img/mac.png');
+  position: fixed;
+  display: block;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center center;
+  -webkit-transform: translateZ(0);
+          transform: translateZ(0);
+  will-change: transform;
+}
+/*--- Bootstrap Padding Fix --*/
+[class*="col-"] {
+    padding: 1rem;
+}
+
+/*
+Extra small (xs) devices (portrait phones, less than 576px)
+No media query since this is the default in Bootstrap
+
+Small (sm) devices (landscape phones, 576px and up)
+@media (min-width: 576px) { ... }
+
+Medium (md) devices (tablets, 768px and up)
+@media (min-width: 768px) { ... }
+
+Large (lg) devices (desktops, 992px and up)
+@media (min-width: 992px) { ... }
+
+Extra (xl) large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) { ... }
+*/
+
+
+
+
+
+
+
+

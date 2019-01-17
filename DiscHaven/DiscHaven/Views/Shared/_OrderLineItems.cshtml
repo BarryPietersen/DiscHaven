@@ -1,0 +1,28 @@
+﻿@model List<DiscHavenDataAccess.Models.LineItem>
+
+<div class="container-fluid">
+    <div class="row">
+        <table class="table table-hover table-striped table-responsive-sm table-bordered">
+            <thead>
+                <tr class="text-center disc-haven-bg-color-midgrey">
+                    <th scope="col">Title</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Item Price</th>
+                    <th scope="col">Line Total</th>
+                </tr>
+            </thead>
+            <tbody class="text-center">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <th scope="row">@item.Name</th>
+                        <td>@item.Quantity</td>
+                        <td>@string.Format("{0:C}", item.ItemPrice)</td>
+                        <td>@string.Format("{0:C}", item.LineTotal)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <br />  
+    </div>
+</div>

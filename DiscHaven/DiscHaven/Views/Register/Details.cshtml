@@ -1,0 +1,13 @@
+﻿@model DiscHaven.ViewModels.CustomerDetailsViewModel
+@{
+    ViewBag.Title = "Registration";
+}
+
+<h2 class="text-center mt-4">Register</h2>
+<div class="container">
+    <form class="p-1" id="customerDetails" method="post" name="customerDetails" action="@Url.Action("ValidateDto", "Register")" novalidate>
+        @Html.AntiForgeryToken()
+        @{Html.RenderPartial("_CustomerDetails", Model);}
+        <button class="btn btn-primary mr-auto" type="submit">Submit</button>
+    </form>
+</div>

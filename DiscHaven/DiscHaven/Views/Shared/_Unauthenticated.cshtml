@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Unauthenticated";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col ml-auto">
+            <h2 class="text-danger text-center">Unauthenticated Access</h2>
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <p class="is-invalid text-center">@ViewBag.ErrorMessage</p>
+            }
+            <a href="@Url.Action("Index","Home")" class="m-auto">Return to home? or login</a>
+        </div>
+    </div>
+</div>
